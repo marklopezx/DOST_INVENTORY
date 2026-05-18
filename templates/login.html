@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Login | DOST INVENTORY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #1e40af;
+            --secondary-blue: #3b82f6;
+            --bg: #f8fafc;
+            --text-dark: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
+            color: var(--text-dark);
+            padding: 20px 16px;
+            /* Protects card clipping on small viewports */
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+        }
+
+        .logo-wrapper {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .logo-wrapper img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+        }
+
+        h2 {
+            margin: 0 0 10px 0;
+            color: var(--primary-blue);
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        p.subtitle {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* Form Styling */
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #475569;
+        }
+
+        /* Responsive UI Input Wrapper to anchor standard layout icons cleanly */
+        .input-icon-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon-wrapper i.field-icon {
+            position: absolute;
+            left: 15px;
+            color: #94a3b8;
+            z-index: 10;
+            pointer-events: none;
+            font-size: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px 12px 42px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f8fafc;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            color: var(--text-dark);
+            height: 46px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Interactive Password Eye Controls Pack */
+        .password-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-container input {
+            padding-right: 42px;
+        }
+
+        .toggle-password-eye {
+            position: absolute;
+            right: 15px;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 15px;
+            user-select: none;
+            transition: color 0.2s ease;
+            z-index: 20;
+            padding: 5px;
+            /* Boosts click target surface area for mobile thumbs */
+        }
+
+        .toggle-password-eye:hover {
+            color: var(--primary-blue);
+        }
+
+        .btn-login {
+            width: 100%;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+            height: 48px;
+        }
+
+        .btn-login:hover {
+            background: #1e3a8a;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.2);
+        }
+
+        .btn-login:active {
+            transform: scale(0.99);
+        }
+
+        /* Alert Messages */
+        .flash-messages {
+            margin-bottom: 20px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .flash-error,
+        .flash-success {
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            text-align: left;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .flash-error {
+            background: #fee2e2;
+            color: #b91c1c;
+            border-left: 4px solid #ef4444;
+        }
+
+        .flash-success {
+            background: #dcfce7;
+            color: #15803d;
+            border-left: 4px solid #22c55e;
+        }
+
+        .footer-link {
+            margin-top: 24px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .footer-text {
+            margin-top: 25px;
+            font-size: 12px;
+            color: #94a3b8;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 15px;
+        }
+
+        /* ==========================================================================
+           ADVANCED BREAKPOINT DESIGN FOR ULTRA-COMPACT MOBILE ENGINE
+           ========================================================================== */
+        @media (max-width: 480px) {
+            body {
+                background: #ffffff;
+                /* Simplifies modern mobile viewport UI rendering */
+                padding: 10px 0;
+                align-items: flex-start;
+                /* Ensures top readability if keypads emerge */
+            }
+
+            .login-container {
+                max-width: 100%;
+                height: 100%;
+            }
+
+            .login-card {
+                box-shadow: none;
+                border-radius: 0;
+                padding: 30px 20px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            /* Fixes the auto-zoom processing context structural glitch in mobile Safari */
+            input {
+                font-size: 16px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo-wrapper">
+                <img src="/static/dost_logo.png" alt="DOST Logo">
+            </div>
+
+            <h2>DOST INVENTORY</h2>
+            <p class="subtitle">Please sign in to manage equipment</p>
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class="flash-messages">
+                {% for message in messages %}
+                {% if "successful" in message or "Logout" in message %}
+                <li class="flash-success">{{ message }}</li>
+                {% else %}
+                <li class="flash-error">{{ message }}</li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+
+            <form action="/login" method="POST">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <div class="input-icon-wrapper">
+                        <i class="fas fa-envelope field-icon"></i>
+                        <input type="email" name="email" placeholder="name@dost.gov.ph" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-icon-wrapper">
+                        <i class="fas fa-lock field-icon"></i>
+                        <div class="password-container">
+                            <input type="password" id="loginPasswordInput" name="password" placeholder="••••••••"
+                                required>
+                            <i class="far fa-eye toggle-password-eye" id="passwordEyeIcon"
+                                onclick="togglePasswordVisibility()"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-login">Sign In</button>
+            </form>
+
+            <p class="footer-link">
+                New user? <a href="/signup_page" style="color: #3b82f6; text-decoration: none; font-weight: 600;">Create
+                    an account</a>
+            </p>
+
+            <p class="footer-text">Department of Science and Technology &copy; 2026</p>
+        </div>
+    </div>
+
+    <script>
+        function togglePasswordVisibility() {
+            const passwordField = document.getElementById('loginPasswordInput');
+            const eyeIcon = document.getElementById('passwordEyeIcon');
+
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
+    </script>
+</body>
+
+</html>

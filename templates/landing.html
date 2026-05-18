@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome | DOST INVENTORY MANAGEMENT SYSTEM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1e40af;
+            --secondary-blue: #3b82f6;
+            --bg-slate: #f8fafc;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-slate);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- BLURRING BASE WRAPPER --- */
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: filter 0.3s ease, transform 0.3s ease;
+            width: 100%;
+            will-change: filter, transform;
+            transform: translate3d(0, 0, 0);
+        }
+
+        body.modal-active .page-wrapper {
+            filter: blur(8px);
+            transform: scale(0.99);
+            pointer-events: none;
+        }
+
+        /* --- BACKGROUND GRADIENTS --- */
+        .abstract-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 10% 80%, rgba(30, 64, 175, 0.05) 0%, transparent 40%);
+        }
+
+        /* --- NAVIGATION HEADER --- */
+        header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 16px 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+            position: relative;
+            z-index: 100;
+        }
+
+        .brand-identity {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo-chassis {
+            width: 46px;
+            height: 46px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        .logo-chassis img {
+            width: 85%;
+            height: 85%;
+            object-fit: contain;
+        }
+
+        .brand-text h1 {
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--primary-blue);
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .brand-text span {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .btn-nav-link {
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 10px 18px;
+            transition: all 0.2s;
+        }
+
+        .btn-nav-link:hover {
+            color: var(--primary-blue);
+        }
+
+        .btn-nav-primary {
+            background: var(--primary-blue);
+            color: white !important;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(30, 64, 175, 0.15);
+        }
+
+        .btn-nav-primary:hover {
+            background: #1e3a8a;
+            transform: translateY(-1px);
+        }
+
+        /* --- MOBILE MENU TRIGGER --- */
+        .mobile-hamburger {
+            display: none;
+            font-size: 22px;
+            color: var(--text-dark);
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+
+        /* --- MOBILE SLIDEOUT NAV PANEL --- */
+        .mobile-nav-drawer {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            padding: 30px 24px;
+            gap: 16px;
+            transition: right 0.3s ease-in-out;
+        }
+
+        .mobile-nav-drawer.open {
+            right: 0;
+        }
+
+        .mobile-drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 14px;
+        }
+
+        .mobile-drawer-header h3 {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--primary-blue);
+        }
+
+        .mobile-drawer-close {
+            font-size: 24px;
+            color: #94a3b8;
+            cursor: pointer;
+        }
+
+        .btn-mobile-nav {
+            width: 100%;
+            text-align: left;
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: none;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-mobile-nav-primary {
+            background: var(--primary-blue);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(30, 64, 175, 0.15);
+            margin-top: 10px;
+        }
+
+        /* --- HERO DISPLAY CENTER --- */
+        .hero-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hero-layout {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-text-content {
+            text-align: left;
+        }
+
+        .gov-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #eff6ff;
+            color: var(--primary-blue);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 24px;
+            border: 1px solid #bfdbfe;
+        }
+
+        .hero-text-content h2 {
+            font-size: 44px;
+            font-weight: 800;
+            line-height: 1.15;
+            color: #0f172a;
+            letter-spacing: -1px;
+            margin-bottom: 18px;
+        }
+
+        .hero-text-content h2 span {
+            color: var(--secondary-blue);
+        }
+
+        .hero-text-content p.description {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 34px;
+            max-width: 520px;
+        }
+
+        .hero-gateways {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-gate {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-gate-solid {
+            background: var(--primary-blue);
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(30, 64, 175, 0.25);
+        }
+
+        .btn-gate-solid:hover {
+            background: #1e3a8a;
+            transform: translateY(-2px);
+        }
+
+        .btn-gate-outline {
+            background: white;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+        }
+
+        .btn-gate-outline:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+            transform: translateY(-2px);
+        }
+
+        /* --- MOCKUP VISUAL BOX --- */
+        .hero-graphic-showcase {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .main-dashboard-mockup {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+            border: 1px solid #e2e8f0;
+            width: 100%;
+            padding: 24px;
+            position: relative;
+        }
+
+        .mockup-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 12px;
+        }
+
+        .mockup-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ef4444;
+        }
+
+        .mockup-dot:nth-child(2) {
+            background: #eab308;
+        }
+
+        .mockup-dot:nth-child(3) {
+            background: #22c55e;
+        }
+
+        .mockup-features {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .feature-strip {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .feature-strip i {
+            font-size: 18px;
+            color: var(--secondary-blue);
+            width: 36px;
+            height: 36px;
+            background: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+            flex-shrink: 0;
+        }
+
+        .feature-strip-text h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .feature-strip-text p {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        /* ==========================================================================
+           🚨 OVERLAY MODAL SYSTEM (SEPARATED INTERIOR CARD ANIMATIONS)
+           ========================================================================== */
+        .modal-overlay-shield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s linear;
+            /* ⚡️ Instant shield layout fade to prevent filter-recalculation lag */
+            padding: 20px;
+        }
+
+        .modal-overlay-shield.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: white;
+            width: 100%;
+            max-width: 440px;
+            padding: 32px 28px;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            position: relative;
+
+            /* ⚡️ Isolated Inner Card Animations */
+            opacity: 0;
+            transform: translateY(-8px) scale(0.98);
+            transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease;
+            will-change: transform, opacity;
+        }
+
+        .modal-overlay-shield.active .modal-card {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* ⚡️ Special Class to make internal layout changes completely instantaneous without a slide glitch */
+        .modal-card.no-transition {
+            transition: none !important;
+        }
+
+        .modal-close-trigger {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: 500;
+            color: #94a3b8;
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s ease;
+            line-height: 1;
+            z-index: 10;
+        }
+
+        .modal-close-trigger:hover {
+            color: #ef4444;
+        }
+
+        .modal-card h2 {
+            margin: 0 0 6px 0;
+            color: var(--primary-blue);
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .modal-card p.subtitle {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .form-group i.input-icon {
+            position: absolute;
+            left: 14px;
+            top: 38px;
+            color: #94a3b8;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #475569;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px 12px 38px;
+            box-sizing: border-box;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f8fafc;
+            font-size: 14px;
+            transition: 0.3s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-row-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .password-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .password-container input {
+            padding-right: 40px;
+        }
+
+        .toggle-password-eye {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 20;
+            padding: 4px;
+        }
+
+        .btn-submit-action {
+            width: 100%;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 13px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 4px;
+        }
+
+        .btn-submit-action:hover {
+            background: #1e3a8a;
+            transform: translateY(-1px);
+        }
+
+        .flash-messages-list {
+            margin-bottom: 14px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .flash-error-item,
+        .flash-success-item {
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            text-align: left;
+            border-left: 4px solid;
+        }
+
+        .flash-error-item {
+            background: #fee2e2;
+            color: #b91c1c;
+            border-left-color: #ef4444;
+        }
+
+        .flash-success-item {
+            background: #dcfce7;
+            color: #15803d;
+            border-left-color: #22c55e;
+        }
+
+        /* ==========================================================================
+           📱 RESPONSIVE MEDIA BREAKPOINTS
+           ========================================================================== */
+        @media (max-width: 1024px) {
+            header {
+                padding: 16px 30px;
+            }
+
+            .hero-section {
+                padding: 40px 30px;
+            }
+
+            .hero-layout {
+                gap: 40px;
+            }
+
+            .hero-text-content h2 {
+                font-size: 38px;
+            }
+        }
+
+        @media (max-width: 868px) {
+            .nav-actions {
+                display: none;
+            }
+
+            .mobile-hamburger {
+                display: block;
+            }
+
+            .hero-layout {
+                grid-template-columns: 1fr;
+                gap: 50px;
+                text-align: center;
+            }
+
+            .hero-text-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .hero-text-content p.description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-gateways {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .btn-gate {
+                width: 100%;
+                max-width: 320px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 14px 20px;
+            }
+
+            .brand-text h1 {
+                font-size: 15px;
+            }
+
+            .brand-text span {
+                font-size: 10px;
+            }
+
+            .hero-section {
+                padding: 30px 16px;
+            }
+
+            .hero-text-content h2 {
+                font-size: 28px;
+            }
+
+            .hero-text-content p.description {
+                font-size: 14px;
+            }
+
+            .form-row-split {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            /* 📱 RESTORED: Your preferred original spacious mobile framing sizes */
+            .modal-overlay-shield {
+                padding: 12px;
+            }
+
+            .modal-card {
+                width: 100% !important;
+                max-width: 380px;
+                padding: 24px 20px;
+                border-radius: 14px;
+            }
+
+            .modal-card h2 {
+                font-size: 20px;
+            }
+
+            .form-group input {
+                padding: 12px 12px 12px 36px;
+                font-size: 16px;
+            }
+
+            .form-group i.input-icon {
+                left: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body class="{% if show_modal %}modal-active{% endif %}">
+
+    <div class="mobile-nav-drawer" id="mobileDrawer">
+        <div class="mobile-drawer-header">
+            <h3>SYSTEM GATEWAYS</h3>
+            <span class="mobile-drawer-close" onclick="toggleMobileDrawer()">&times;</span>
+        </div>
+        <button type="button" class="btn-mobile-nav" onclick="triggerMobileAuth('loginModal')">
+            <i class="fas fa-sign-in-alt"></i> Sign In
+        </button>
+        <button type="button" class="btn-mobile-nav btn-mobile-nav-primary" onclick="triggerMobileAuth('signupModal')">
+            <i class="fas fa-user-plus"></i> Create Account
+        </button>
+    </div>
+
+    <div class="page-wrapper">
+        <div class="abstract-bg"></div>
+
+        <header>
+            <div class="brand-identity">
+                <div class="logo-chassis">
+                    <img src="/static/dost_logo.png" alt="DOST Official Logo">
+                </div>
+                <div class="brand-text">
+                    <h1>DOST INVENTORY</h1>
+                    <span>Management System</span>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <button type="button" class="btn-nav-link" onclick="openModal('loginModal')">Sign In</button>
+                <button type="button" class="btn-nav-link btn-nav-primary" onclick="openModal('signupModal')">Create
+                    Account</button>
+            </div>
+
+            <button class="mobile-hamburger" onclick="toggleMobileDrawer()" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </header>
+
+        <main class="hero-section">
+            <div class="hero-layout">
+                <div class="hero-text-content">
+                    <div class="gov-pill">
+                        <i class="fas fa-shield-halved"></i> Internal Secure Network
+                    </div>
+                    <h2>Welcome to DOST <span>Equipment Inventory</span> Management</h2>
+                    <p class="description">
+                        An advanced full-stack administrative platform engineered for the Department of Science and
+                        Technology. Securely monitor logistics, authorize properties, inspect item lifecycles, and audit
+                        internal resources seamlessly.
+                    </p>
+                    <div class="hero-gateways">
+                        <button type="button" class="btn-gate btn-gate-solid" onclick="openModal('loginModal')">
+                            Sign In To Account <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button type="button" class="btn-gate btn-gate-outline" onclick="openModal('signupModal')">
+                            Register Staff
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hero-graphic-showcase">
+                    <div class="main-dashboard-mockup">
+                        <div class="mockup-header">
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                        </div>
+                        <div class="mockup-features">
+                            <div class="feature-strip">
+                                <i class="fas fa-barcode"></i>
+                                <div class="feature-strip-text">
+                                    <h4>Real-Time Resource Tracking</h4>
+                                    <p>Instantly update item statuses, specifications, and custodian ownership records.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="feature-strip">
+                                <i class="fas fa-user-shield"></i>
+                                <div class="feature-strip-text">
+                                    <h4>Role-Based Access Verification</h4>
+                                    <p>Strict administrative checks isolated directly via secure user session tokens.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="feature-strip">
+                                <i class="fas fa-clipboard-check"></i>
+                                <div class="feature-strip-text">
+                                    <h4>Automated Log Reports</h4>
+                                    <p>Track history actions, approved distributions, and system metrics transparently.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            Department of Science and Technology &copy; 2026 | Powered by Secure Supabase Encryption Infrastructure
+        </footer>
+    </div>
+
+    <div class="modal-overlay-shield {% if show_modal and not reg_mode %}active{% endif %}" id="loginModal"
+        onclick="closeModalOutside(event, 'loginModal')">
+        <div class="modal-card" id="loginCard">
+            <span class="modal-close-trigger" onclick="closeModal('loginModal')">&times;</span>
+            <div class="logo-wrapper"
+                style="width:64px; height:64px; margin:0 auto 12px auto; border: 1px solid #e2e8f0; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 6px rgba(0,0,0,0.02);">
+                <img src="/static/dost_logo.png" alt="DOST Logo" style="width:80%; height:80%; object-fit:contain;">
+            </div>
+            <h2>DOST INVENTORY</h2>
+            <p class="subtitle">Please sign in to manage equipment</p>
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages and not reg_mode %}
+            <ul class="flash-messages-list">
+                {% for message in messages %}
+                <li class="{% if 'successful' in message %}flash-success-item{% else %}flash-error-item{% endif %}">{{
+                    message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+
+            <form action="/login" method="POST">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="email" name="email" placeholder="name@dost.gov.ph" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <i class="fas fa-lock input-icon"></i>
+                    <div class="password-container">
+                        <input type="password" id="loginPasswordInput" name="password" placeholder="••••••••" required>
+                        <i class="far fa-eye toggle-password-eye" id="loginPasswordEye"
+                            onclick="togglePassword('loginPasswordInput', 'loginPasswordEye')"></i>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit-action">Sign In</button>
+            </form>
+            <p style="margin-top: 20px; font-size: 13px; color: #64748b;">
+                New user? <a href="#" onclick="switchModal('loginModal', 'signupModal')"
+                    style="color: #3b82f6; text-decoration: none; font-weight: 600;">Create an account</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="modal-overlay-shield {% if show_modal and reg_mode %}active{% endif %}" id="signupModal"
+        onclick="closeModalOutside(event, 'signupModal')">
+        <div class="modal-card" id="signupCard">
+            <span class="modal-close-trigger" onclick="closeModal('signupModal')">&times;</span>
+            <div class="logo-wrapper"
+                style="width:64px; height:64px; margin:0 auto 12px auto; border: 1px solid #e2e8f0; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 6px rgba(0,0,0,0.02);">
+                <img src="/static/dost_logo.png" alt="DOST Logo" style="width:80%; height:80%; object-fit:contain;">
+            </div>
+            <h2>CREATE ACCOUNT</h2>
+            <p class="subtitle">Register internal network credentials</p>
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages and reg_mode %}
+            <ul class="flash-messages-list">
+                {% for message in messages %}
+                <li class="flash-error-item">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+
+            <form action="/signup" method="POST">
+                <div class="form-row-split">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" name="first_name" placeholder="Juan" style="padding-left:14px;" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" name="last_name" placeholder="Dela Cruz" style="padding-left:14px;" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="email" name="email" placeholder="name@dost.gov.ph" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <i class="fas fa-lock input-icon"></i>
+                    <div class="password-container">
+                        <input type="password" id="signupPasswordInput" name="password" placeholder="••••••••" required>
+                        <i class="far fa-eye toggle-password-eye" id="signupPasswordEye"
+                            onclick="togglePassword('signupPasswordInput', 'signupPasswordEye')"></i>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit-action">Register Staff</button>
+            </form>
+            <p style="margin-top: 20px; font-size: 13px; color: #64748b;">
+                Already have an account? <a href="#" onclick="switchModal('signupModal', 'loginModal')"
+                    style="color: #3b82f6; text-decoration: none; font-weight: 600;">Log in here</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function toggleMobileDrawer() {
+            document.getElementById('mobileDrawer').classList.toggle('open');
+        }
+
+        function triggerMobileAuth(modalId) {
+            toggleMobileDrawer();
+            openModal(modalId);
+        }
+
+        function openModal(modalId) {
+            document.body.classList.add('modal-active');
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            if (!document.getElementById('loginModal').classList.contains('active') &&
+                !document.getElementById('signupModal').classList.contains('active')) {
+                document.body.classList.remove('modal-active');
+            }
+        }
+
+        function closeModalOutside(event, modalId) {
+            if (event.target.id === modalId) {
+                closeModal(modalId);
+            }
+        }
+
+        function switchModal(closeId, openId) {
+            const closingShield = document.getElementById(closeId);
+            const openingShield = document.getElementById(openId);
+
+            // Find the active card inside the current open modal container
+            const currentCard = closingShield.querySelector('.modal-card');
+            const targetCard = openingShield.querySelector('.modal-card');
+
+            // ⚡️ Step 1: Lock the parent transition timers out of layout processing
+            targetCard.classList.add('no-transition');
+
+            // ⚡️ Step 2: Swap visibility states instantly so background filter stays frozen
+            closingShield.classList.remove('active');
+            openingShield.classList.add('active');
+
+            // ⚡️ Step 3: Clean cross-fade the new layout seamlessly inside the static blur frame
+            requestAnimationFrame(() => {
+                targetCard.classList.remove('no-transition');
+            });
+        }
+
+        function togglePassword(inputId, eyeId) {
+            const field = document.getElementById(inputId);
+            const eye = document.getElementById(eyeId);
+            if (field.type === 'password') {
+                field.type = 'text';
+                eye.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                field.type = 'password';
+                eye.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+    </script>
+</body>
+
+</html>

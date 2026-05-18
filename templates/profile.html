@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile | DOST INVENTORY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sidebar-grad: linear-gradient(180deg, #0f172a 0%, #1e40af 100%);
+            --primary: #1e40af;
+            --primary-dark: #1e3a8a;
+
+            /* Executive Soft Blue Palettes */
+            --btn-soft-slate: #576b85;
+            --btn-soft-slate-hover: #415166;
+            --btn-muted-blue: #3a629b;
+            --btn-muted-blue-hover: #294773;
+
+            --secondary: #3b82f6;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --sidebar-collapsed-w: 76px;
+            --sidebar-expanded-w: 260px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            height: 100vh;
+            background: var(--bg);
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-collapsed-w);
+            background: var(--sidebar-grad);
+            color: white;
+            padding: 25px 12px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 15px rgba(15, 23, 42, 0.05);
+            flex-shrink: 0;
+            z-index: 1000;
+            overflow: hidden;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+        }
+
+        .sidebar:hover {
+            width: var(--sidebar-expanded-w);
+            padding: 25px 20px;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 10px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .logo-wrapper {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .sidebar:hover .logo-wrapper {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 12px;
+        }
+
+        .dost-logo {
+            width: 90%;
+            height: 90%;
+            object-fit: contain;
+        }
+
+        .sidebar-brand {
+            font-size: 15px;
+            font-weight: 800;
+            text-align: center;
+            letter-spacing: 1px;
+            color: white;
+            text-transform: uppercase;
+            white-space: nowrap;
+            opacity: 0;
+            max-height: 0;
+            margin-top: 0;
+            transition: opacity 0.2s ease, max-height 0.2s ease;
+        }
+
+        .sidebar:hover .sidebar-brand {
+            opacity: 1;
+            max-height: 40px;
+            margin-top: 4px;
+        }
+
+        .menu-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.35);
+            margin: 25px 0 10px 5px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+
+        .sidebar:hover .menu-label {
+            opacity: 1;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            padding: 12px 14px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            width: 100%;
+        }
+
+        .nav-link i {
+            font-size: 16px;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .nav-link span {
+            margin-left: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .sidebar:hover .nav-link span {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .logout-btn {
+            margin-top: auto;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn span {
+            margin-left: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .sidebar:hover .logout-btn span {
+            opacity: 1;
+        }
+
+        .logout-btn:hover {
+            color: #f87171;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 8px;
+        }
+
+        /* --- MAIN VIEW CANVAS --- */
+        .main-content {
+            flex: 1;
+            padding: 40px 20px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            background: #f1f5f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-title-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 740px;
+        }
+
+        .header-icon-box {
+            font-size: 30px;
+            color: var(--btn-muted-blue);
+            background: #ffffff;
+            width: 54px;
+            height: 54px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .page-title-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+        }
+
+        .page-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+
+        .profile-dashboard-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 740px;
+        }
+
+        .management-block {
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.02), 0 4px 6px -4px rgba(0, 0, 0, 0.02);
+            padding: 30px;
+        }
+
+        .block-title-header {
+            font-size: 13px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* --- AVATAR CHASSIS PANEL --- */
+        .avatar-centered-chassis {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .avatar-uploader-frame {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+
+        .profile-image-circle {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--white);
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08), 0 0 0 2px var(--btn-muted-blue);
+            background: #ffffff;
+            display: block;
+            transition: transform 0.2s ease;
+        }
+
+        .avatar-uploader-frame:hover .profile-image-circle {
+            transform: scale(1.03);
+        }
+
+        .display-full-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+            margin-bottom: 2px;
+        }
+
+        .display-system-role {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+        }
+
+        .btn-mini-upload {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+        }
+
+        .btn-mini-upload:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+            border-color: #94a3b8;
+        }
+
+        .hidden-file-input {
+            display: none !important;
+        }
+
+        /* --- CREDENTIAL FIELDS PACK --- */
+        .identity-modern-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .field-container-row {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 12px 18px;
+            border-radius: 8px;
+        }
+
+        .field-container-row label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .field-container-row .field-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        /* --- EQUAL PROPORTION BALANCED BUTTON BAR --- */
+        .actions-centered-flex {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .btn-compact-control {
+            flex: 1;
+            background: var(--btn-soft-slate);
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+            white-space: nowrap;
+            transition: background 0.15s ease, transform 0.1s ease;
+        }
+
+        .btn-compact-control:hover {
+            background: var(--btn-soft-slate-hover);
+        }
+
+        .btn-compact-control:active {
+            transform: scale(0.98);
+        }
+
+        .btn-blue-accent {
+            background: var(--btn-muted-blue);
+        }
+
+        .btn-blue-accent:hover {
+            background: var(--btn-muted-blue-hover);
+        }
+
+        /* --- ACTIVITY ENGINE METRICS --- */
+        .metrics-summary-row {
+            display: grid;
+            grid-template-columns: 1.2fr repeat(3, 1fr);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+            background: var(--white);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+        }
+
+        .metric-cell-box {
+            padding: 20px 14px;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .metric-cell-box:last-child {
+            border-right: none;
+        }
+
+        .metric-cell-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-pill {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        .badge-pending {
+            background: #eff6ff;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+
+        .badge-approved {
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .badge-rejected {
+            background: #fff5f5;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .metric-value-num {
+            font-size: 30px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+        }
+
+        /* --- MODALS --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-content h3 {
+            margin-bottom: 6px;
+            font-size: 18px;
+            color: #0f172a;
+            font-weight: 700;
+        }
+
+        .modal-content p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            color: #0f172a;
+        }
+
+        .modal-footer-btns {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .btn-modal-cancel {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid var(--border-color);
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .btn-modal-save {
+            background: var(--btn-muted-blue);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .toast-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 14px 24px;
+            border-radius: 8px;
+            background: #0f172a;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            z-index: 100000;
+            display: none;
+        }
+
+        /* ==========================================================================
+           ADVANCED MOBILE RESPONSIVENESS AND FIXED FLUSH NAVBAR DECK
+           ========================================================================== */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                overflow-x: hidden;
+                background: #111827;
+            }
+
+            /* --- SECURED MOBILE NAVIGATION FRAME --- */
+            .sidebar {
+                position: fixed !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: space-around !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background: #1e40af !important;
+                background: linear-gradient(90deg, #0f172a 0%, #1e40af 100%) !important;
+                box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.25) !important;
+                border-radius: 0 !important;
+                z-index: 99999 !important;
+                box-sizing: border-box !important;
+                padding-bottom: env(safe-area-inset-bottom) !important;
+                height: calc(60px + env(safe-area-inset-bottom)) !important;
+            }
+
+            .sidebar:hover {
+                width: 100% !important;
+                padding: 0 !important;
+            }
+
+            .logo-container,
+            .menu-label,
+            .sidebar .nav-link span,
+            .sidebar .logout-btn span {
+                display: none !important;
+            }
+
+            .sidebar .nav-link,
+            .sidebar .logout-btn {
+                width: 100% !important;
+                height: 100% !important;
+                margin-bottom: 0 !important;
+                padding: 0 !important;
+                color: rgba(255, 255, 255, 0.7) !important;
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+                border-radius: 0 !important;
+            }
+
+            .sidebar .nav-link i,
+            .sidebar .logout-btn i {
+                font-size: 20px !important;
+                width: auto !important;
+            }
+
+            .sidebar .nav-link.active {
+                background: rgba(255, 255, 255, 0.15) !important;
+                color: #ffffff !important;
+            }
+
+            .sidebar .logout-btn {
+                margin-top: 0 !important;
+                color: #fca5a5 !important;
+                background: none !important;
+            }
+
+            .main-content {
+                padding: 20px 15px calc(80px + env(safe-area-inset-bottom)) 15px !important;
+                height: 100vh;
+                width: 100%;
+            }
+
+            .header-title-container {
+                gap: 12px;
+                margin-bottom: 25px;
+            }
+
+            .page-title {
+                font-size: 20px;
+            }
+
+            .management-block {
+                padding: 20px 15px;
+            }
+
+            .actions-centered-flex {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn-compact-control {
+                width: 100%;
+            }
+
+            /* ==========================================================================
+               UPDATED: COMPACT HORIZONTAL LAYOUT ENGINE FOR ACTIVITY METRICS
+               ========================================================================== */
+            .metrics-summary-row {
+                grid-template-columns: repeat(4, 1fr) !important;
+                /* Forces row allocation */
+            }
+
+            .metric-cell-box {
+                padding: 12px 4px !important;
+                /* Highly compressed padding spacing */
+                border-right: 1px solid var(--border-color) !important;
+                border-bottom: none !important;
+                /* Overriding prior vertical layout */
+            }
+
+            .metric-cell-box:last-child {
+                border-right: none !important;
+            }
+
+            .metric-cell-label {
+                font-size: 9px !important;
+                /* Scaled down description strings */
+                margin-bottom: 4px !important;
+                flex-direction: column !important;
+                /* Stack text and pill icons cleanly */
+                gap: 3px !important;
+            }
+
+            .badge-pill {
+                font-size: 8px !important;
+                padding: 1px 4px !important;
+            }
+
+            .metric-value-num {
+                font-size: 16px !important;
+                /* Downscaled metric count fonts */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="toastAlert" class="toast-notification"></div>
+
+    <div class="sidebar">
+        <div class="logo-container">
+            <div class="logo-wrapper"><img src="/static/dost_logo.png" class="dost-logo"></div>
+            <div class="sidebar-brand">DOST STAFF</div>
+        </div>
+
+        <p class="menu-label">Main Menu</p>
+        <a href="/user_home" class="nav-link"><i class="fas fa-chart-pie"></i> <span>Dashboard</span></a>
+        <a href="/user_home#pending-requests" class="nav-link"><i class="fas fa-clock"></i> <span>Pending
+                Requests</span></a>
+        <a href="/user_home#history" class="nav-link"><i class="fas fa-file-invoice"></i> <span>My History</span></a>
+
+        <p class="menu-label">Account</p>
+        <a href="/profile" class="nav-link active"><i class="fas fa-circle-user"></i> <span>Profile</span></a>
+        <a href="/logout" class="logout-btn"><i class="fas fa-sign-out-alt"></i> <span>Sign Out</span></a>
+    </div>
+
+    <div class="main-content">
+
+        <div class="header-title-container">
+            <div class="header-icon-box"><i class="far fa-address-card"></i></div>
+            <div class="page-title-group">
+                <h1 class="page-title">Account Profile Settings</h1>
+                <span class="page-subtitle">Manage your identity credentials, metrics, and security controls</span>
+            </div>
+        </div>
+
+        <div class="profile-dashboard-grid">
+
+            <div class="management-block">
+                <h3 class="block-title-header"><i class="far fa-image"></i> Avatar Control</h3>
+                <div class="avatar-centered-chassis">
+                    <div class="avatar-uploader-frame" onclick="document.getElementById('avatarFileInput').click()">
+                        <img id="avatarImage"
+                            src="{{ user_profile.avatar_url if user_profile and user_profile.avatar_url else '/static/default_avatar.png' }}"
+                            class="profile-image-circle" alt="User Avatar">
+                    </div>
+                    <input type="file" id="avatarFileInput" class="hidden-file-input" accept="image/*"
+                        onchange="uploadAvatarImageFile(this)">
+
+                    <h2 class="display-full-name" id="profileCardName">
+                        {{ user_profile.first_name if user_profile and user_profile.first_name else 'Juan' }}
+                        {{ user_profile.last_name if user_profile and user_profile.last_name else 'Dela Cruz' }}
+                    </h2>
+                    <span class="display-system-role">System Role: {{ user_profile.role if user_profile else 'Staff'
+                        }}</span>
+
+                    <button class="btn-mini-upload" onclick="document.getElementById('avatarFileInput').click()">
+                        <i class="fas fa-camera"></i> Change Profile
+                    </button>
+                </div>
+            </div>
+
+            <div class="management-block">
+                <h3 class="block-title-header"><i class="far fa-id-badge"></i> Identity Credentials</h3>
+
+                <div class="identity-modern-fields">
+                    <div class="field-container-row">
+                        <label>First Name</label>
+                        <div class="field-value" id="infoFirstName">{{ user_profile.first_name if user_profile and
+                            user_profile.first_name else 'Juan' }}</div>
+                    </div>
+                    <div class="field-container-row">
+                        <label>Last Name</label>
+                        <div class="field-value" id="infoLastName">{{ user_profile.last_name if user_profile and
+                            user_profile.last_name else 'Dela Cruz' }}</div>
+                    </div>
+                    <div class="field-container-row">
+                        <label>Registered Email Address</label>
+                        <div class="field-value">{{ current_user.email if current_user else 'user@dost.gov.ph' }}</div>
+                    </div>
+                </div>
+
+                <div class="actions-centered-flex">
+                    <button class="btn-compact-control" onclick="toggleNameModal(true)">
+                        <i class="fas fa-user-pen"></i> Edit Name
+                    </button>
+                    <button class="btn-compact-control btn-blue-accent" onclick="togglePasswordModal(true)">
+                        <i class="fas fa-key"></i> Change Password
+                    </button>
+                </div>
+            </div>
+
+            <div class="management-block">
+                <h3 class="block-title-header"><i class="fas fa-chart-line"></i> System Activity Metrics</h3>
+                <div class="metrics-summary-row">
+                    <div class="metric-cell-box">
+                        <span class="metric-cell-label">Total Requests</span>
+                        <span class="metric-value-num">{{ total_requests_count if total_requests_count else 0 }}</span>
+                    </div>
+                    <div class="metric-cell-box">
+                        <span class="metric-cell-label">Pending <span class="badge-pill badge-pending">{{ pending_count
+                                if pending_count else 0 }}</span></span>
+                        <span class="metric-value-num">{{ pending_count if pending_count else 0 }}</span>
+                    </div>
+                    <div class="metric-cell-box">
+                        <span class="metric-cell-label">Approved <span class="badge-pill badge-approved">{{
+                                approved_count if approved_count else 0 }}</span></span>
+                        <span class="metric-value-num">{{ approved_count if approved_count else 0 }}</span>
+                    </div>
+                    <div class="metric-cell-box">
+                        <span class="metric-cell-label">Rejected <span class="badge-pill badge-rejected">{{
+                                rejected_count if rejected_count else 0 }}</span></span>
+                        <span class="metric-value-num">{{ rejected_count if rejected_count else 0 }}</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="editNameModal">
+        <div class="modal-content">
+            <h3>Edit Name Settings</h3>
+            <p>Modify your first name and last name profile record parameters below.</p>
+            <form id="editNameForm" onsubmit="processNameUpdate(event)">
+                <div class="form-group">
+                    <label for="inputFirstName">First Name</label>
+                    <input type="text" id="inputFirstName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="inputLastName">Last Name</label>
+                    <input type="text" id="inputLastName" class="form-control" required>
+                </div>
+                <div class="modal-footer-btns">
+                    <button type="button" class="btn-modal-cancel" onclick="toggleNameModal(false)">Cancel</button>
+                    <button type="submit" class="btn-modal-save">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="passwordSettingsModal">
+        <div class="modal-content">
+            <h3>Update Password</h3>
+            <p>Modify and assign a fresh encryption login passkey to your account profile.</p>
+            <form id="passwordSettingsForm" onsubmit="processPasswordUpdate(event)">
+                <div class="form-group">
+                    <label for="oldPassword">Old Password</label>
+                    <input type="password" id="oldPassword" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" class="form-control" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm New Password</label>
+                    <input type="password" id="confirmPassword" class="form-control" required minlength="6">
+                </div>
+                <div class="modal-footer-btns">
+                    <button type="button" class="btn-modal-cancel" onclick="togglePasswordModal(false)">Cancel</button>
+                    <button type="submit" class="btn-modal-save">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleNameModal(show) {
+            if (show) {
+                document.getElementById('inputFirstName').value = document.getElementById('infoFirstName').innerText;
+                document.getElementById('inputLastName').value = document.getElementById('infoLastName').innerText;
+                document.getElementById('editNameModal').style.display = 'flex';
+            } else {
+                document.getElementById('editNameModal').style.display = 'none';
+            }
+        }
+
+        function togglePasswordModal(show) {
+            const modal = document.getElementById('passwordSettingsModal');
+            if (show) {
+                modal.style.display = 'flex';
+            } else {
+                modal.style.display = 'none';
+                document.getElementById('passwordSettingsForm').reset();
+            }
+        }
+
+        function triggerToastAlert(message) {
+            const toast = document.getElementById('toastAlert');
+            toast.innerText = message;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 4000);
+        }
+
+        async function processNameUpdate(e) {
+            e.preventDefault();
+            const fName = document.getElementById('inputFirstName').value.trim();
+            const lName = document.getElementById('inputLastName').value.trim();
+
+            const formData = new FormData();
+            formData.append('first_name', fName);
+            formData.append('last_name', lName);
+
+            try {
+                const response = await fetch('/update_profile_name', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success || result.status === 'success') {
+                    document.getElementById('profileCardName').innerText = `${fName} ${lName}`;
+                    document.getElementById('infoFirstName').innerText = fName;
+                    document.getElementById('infoLastName').innerText = lName;
+                    triggerToastAlert("Identity credentials successfully saved to database!");
+                    toggleNameModal(false);
+                } else {
+                    triggerToastAlert("Error saving name: " + (result.error || result.message || "Unknown Backend Fault"));
+                }
+            } catch (err) {
+                try {
+                    const fallbackResponse = await fetch('/update_profile_name', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams({ 'first_name': fName, 'last_name': lName })
+                    });
+                    const fallbackResult = await fallbackResponse.json();
+                    if (fallbackResult.success || fallbackResult.status === 'success') {
+                        document.getElementById('profileCardName').innerText = `${fName} ${lName}`;
+                        document.getElementById('infoFirstName').innerText = fName;
+                        document.getElementById('infoLastName').innerText = lName;
+                        triggerToastAlert("Identity credentials saved successfully!");
+                        toggleNameModal(false);
+                        return;
+                    }
+                } catch (e) { }
+                triggerToastAlert("Database synchronization communication failure.");
+            }
+        }
+
+        async function uploadAvatarImageFile(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const formData = new FormData();
+                formData.append('avatar', file);
+
+                try {
+                    const response = await fetch('/upload_avatar', { method: 'POST', body: formData });
+                    const result = await response.json();
+
+                    if (result.success || result.status === 'success') {
+                        triggerToastAlert("Profile image updated successfully!");
+                        const freshTimestampUrl = (result.avatar_url || result.url) + '?t=' + new Date().getTime();
+                        document.getElementById('avatarImage').src = freshTimestampUrl;
+                    } else {
+                        triggerToastAlert("Upload Error: " + result.error);
+                    }
+                } catch (err) { triggerToastAlert("Failed to execute storage uploads."); }
+            }
+        }
+
+        async function processPasswordUpdate(e) {
+            e.preventDefault();
+            const oldPasswordVal = document.getElementById('oldPassword').value;
+            const passwordVal = document.getElementById('newPassword').value;
+            const confirmVal = document.getElementById('confirmPassword').value;
+
+            if (passwordVal !== confirmVal) {
+                triggerToastAlert("Passwords validation parameters do not match!");
+                return;
+            }
+
+            if (oldPasswordVal === passwordVal) {
+                triggerToastAlert("New password cannot be identical to your old password!");
+                return;
+            }
+
+            try {
+                const response = await fetch('/change_password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({
+                        'old_password': oldPasswordVal,
+                        'password': passwordVal
+                    })
+                });
+                const result = await response.json();
+
+                if (result.success || result.status === 'success') {
+                    triggerToastAlert("Account security password updated!");
+                    togglePasswordModal(false);
+                } else {
+                    triggerToastAlert("Error: " + result.error);
+                }
+            } catch (err) { triggerToastAlert("Error updating secure parameters."); }
+        }
+    </script>
+</body>
+
+</html>
